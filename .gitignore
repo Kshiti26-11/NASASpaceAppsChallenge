@@ -39,6 +39,4 @@ Thumbs.db
 *.swp
 *.swo
 
-# Large / generated data files
-data/*.parquet
-*.parquet
+

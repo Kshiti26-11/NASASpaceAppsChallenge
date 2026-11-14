@@ -111,6 +111,15 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
+    # ── Exception Handler ────────────────────────────────────────────────────
+    @app.exception_handler(Exception)
+    async def global_exception_handler(request, exc):
+        logger.exception("Global unhandled exception: %s", exc)
+        return JSONResponse(
+            status_code=500,
+            content={"detail": str(exc)},
+        )
+
     # ── Routers ───────────────────────────────────────────────────────────────
     API_PREFIX = "/api"
     app.include_router(meta.router,       prefix=API_PREFIX)

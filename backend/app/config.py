@@ -1,10 +1,28 @@
 # CONFIGURATION - Change data paths and column mappings here when switching to real data.
 # Never hard-code column names anywhere else in the codebase.
 
+import os
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parents[2]
-DATA_DIR = BASE_DIR / "data"
+# ── Data directory resolution ──────────────────────────────────────────────────
+# Resolves data folder in order:
+# 1. Environment variable DATA_DIR
+# 2. backend/data (Vercel serverless bundle deployment)
+# 3. ../data (Local monorepo root)
+_env_data = os.environ.get("DATA_DIR")
+if _env_data and Path(_env_data).is_dir():
+    DATA_DIR = Path(_env_data)
+else:
+    _backend_dir = Path(__file__).resolve().parents[1]
+    _root_dir    = Path(__file__).resolve().parents[2]
+    if (_backend_dir / "data" / "hotspots_harmonized.parquet").exists():
+        DATA_DIR = _backend_dir / "data"
+    elif (_root_dir / "data" / "hotspots_harmonized.parquet").exists():
+        DATA_DIR = _root_dir / "data"
+    elif (_backend_dir / "data").is_dir():
+        DATA_DIR = _backend_dir / "data"
+    else:
+        DATA_DIR = _root_dir / "data"
 
 # ── File paths ─────────────────────────────────────────────────────────────────
 # DATA NOTE: Change these paths to point to real Parquet files from the teammate's pipeline.
