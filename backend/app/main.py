@@ -128,6 +128,7 @@ def create_app() -> FastAPI:
         return RedirectResponse(url="/docs")
 
     @app.get("/health", tags=["health"])
+    @app.get("/api/health", tags=["health"])
     async def health() -> JSONResponse:
         """
         Health-check endpoint.
