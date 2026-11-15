@@ -27,6 +27,8 @@ export default function AnalysisPage() {
   const [startDate, setStartDate] = useState('2001-01-01')
   const [endDate, setEndDate] = useState('2024-12-31')
 
+  const isHistorical = dataMode === 'historical'
+
   const {
     runAnalysis,
     downloadCSV,
@@ -40,13 +42,13 @@ export default function AnalysisPage() {
     selectedAnomalyMonth,
     setSelectedAnomalyMonth,
     isAnyLoading,
-  } = useAnalysis(region, startDate, endDate)
+  } = useAnalysis(region, startDate, endDate, !isHistorical)
 
-  // Auto-run analysis on landing so page is immediately populated for Gujarat
+  // Auto-run analysis on landing & whenever dataMode changes
   useEffect(() => {
     runAnalysis()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [dataMode])
 
   // Update date bounds once meta loads
   useEffect(() => {
@@ -70,8 +72,6 @@ export default function AnalysisPage() {
     error.timeseries ||
     error.hotspots ||
     metaError
-
-  const isHistorical = dataMode === 'historical'
 
   return (
     <div className="analysis-layout">
@@ -114,8 +114,8 @@ export default function AnalysisPage() {
             fontSize: 13,
             lineHeight: 1.5,
           }}>
-            <strong>Near Real-Time Mode:</strong> Showing latest 7-day active fire detections from FIRMS.
-            Switch to <strong>Historical Analysis</strong> mode for trend, anomaly, and calendar charts (2001–2024).
+            <strong>Near Real-Time Mode:</strong> Active satellite detections streamed directly from NASA FIRMS (VIIRS NOAA-20 &amp; MODIS).
+            Switch to <strong>Historical Analysis</strong> mode for full 2001-2024 decadal anomaly, seasonality, and calendar charts.
           </div>
         )}
 

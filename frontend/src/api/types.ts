@@ -70,6 +70,7 @@ export interface DateRangeRequest {
   region: Region
   start_date: string
   end_date: string
+  live?: boolean
 }
 
 export interface CalendarRequest extends DateRangeRequest {}

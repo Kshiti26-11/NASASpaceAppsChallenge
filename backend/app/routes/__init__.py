@@ -55,3 +55,4 @@ class DateRangeBody(BaseModel):
     region: RegionModel
     start_date: str  # YYYY-MM-DD
     end_date: str    # YYYY-MM-DD
+    live: Optional[bool] = False

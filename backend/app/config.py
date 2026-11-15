@@ -74,6 +74,10 @@ DATA_EXTENT: dict = {
 HOTSPOT_DISPLAY_CAP: int = 5_000     # max hotspot points sent to browser
 CACHE_MAXSIZE:       int = 128       # LRU cache size for repeated identical queries
 
+# ── NASA FIRMS Live API Settings ──────────────────────────────────────────────
+FIRMS_MAP_KEY: str = os.environ.get("FIRMS_MAP_KEY") or "19a50e22051a6e5f14fd49b33091272d"
+FIRMS_API_BASE_URL: str = "https://firms.modaps.eosdis.nasa.gov/api/area/csv"
+
 # ── Method note (shown in /api/meta and About page) ──────────────────────────
 METHOD_NOTE = (
     "Harmonized counts use a cross-sensor scaling factor derived from the "

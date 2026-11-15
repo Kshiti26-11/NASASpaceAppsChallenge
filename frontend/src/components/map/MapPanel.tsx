@@ -287,7 +287,7 @@ const MapPanel: React.FC<MapPanelProps> = ({
         flexShrink: 0,
       }}>
         <span>
-          {dataMode === 'realtime' ? 'Near Real-Time Fire Hotspots' : 'Region Selection'} : Interactive Map
+          {dataMode === 'realtime' ? 'Near Real-Time Active Fires (NASA FIRMS Live)' : 'Region Selection'} : Interactive Map
         </span>
         <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 400, fontSize: 11 }}>
           Draw a rectangle or polygon to select a region

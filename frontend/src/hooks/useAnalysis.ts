@@ -64,6 +64,7 @@ export function useAnalysis(
   region: Region | null,
   startDate: string,
   endDate: string,
+  isLive: boolean = false,
 ): UseAnalysisResult {
   const [calendar, setCalendar] = useState<CalendarPoint[]>([])
   const [anomaly, setAnomaly] = useState<AnomalyResponse | null>(null)
@@ -92,12 +93,25 @@ export function useAnalysis(
   const runAnalysis = useCallback(async () => {
     if (!region) return
 
-    const dateRangeBody = { region, start_date: startDate, end_date: endDate }
+    const dateRangeBody = { region, start_date: startDate, end_date: endDate, live: isLive }
 
     // Reset errors
     setError({ calendar: null, anomaly: null, summary: null, timeseries: null, hotspots: null })
 
-    // Set all loading
+    if (isLive) {
+      setLoading({ calendar: false, anomaly: false, summary: false, timeseries: false, hotspots: true })
+      try {
+        const hotRes = await api.postHotspots(dateRangeBody)
+        setHotspots(hotRes.data)
+      } catch (err) {
+        setError((prev) => ({ ...prev, hotspots: extractError(err) }))
+      } finally {
+        setLoading((prev) => ({ ...prev, hotspots: false }))
+      }
+      return
+    }
+
+    // Set all loading for historical mode
     setLoading({ calendar: true, anomaly: true, summary: true, timeseries: true, hotspots: true })
 
     // Run all in parallel
