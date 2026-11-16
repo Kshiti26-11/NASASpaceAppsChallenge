@@ -6,6 +6,7 @@ import { useAnalysis } from '../hooks/useAnalysis'
 import ControlPanel from '../components/controls/ControlPanel'
 import SummaryCards from '../components/cards/SummaryCards'
 import MapPanel from '../components/map/MapPanel'
+import FireOverviewPanel from '../components/charts/FireOverviewPanel'
 import CalendarHeatmap from '../components/charts/CalendarHeatmap'
 import AnomalyChart from '../components/charts/AnomalyChart'
 import TimeseriesChart from '../components/charts/TimeseriesChart'
@@ -140,6 +141,14 @@ export default function AnalysisPage() {
             dataMode={dataMode}
           />
         </div>
+
+        {/* 2b. Global Fire Monitoring Suite (Real NASA & 24-year data) */}
+        <FireOverviewPanel
+          calendarData={calendar}
+          hotspots={hotspots}
+          loading={loading.calendar || loading.hotspots}
+          dataMode={dataMode}
+        />
 
         {/* 3–5: Historical charts only */}
         {isHistorical && (
