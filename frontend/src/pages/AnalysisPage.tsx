@@ -47,8 +47,7 @@ export default function AnalysisPage() {
   // Auto-run analysis on landing & whenever dataMode changes
   useEffect(() => {
     runAnalysis()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataMode])
+  }, [runAnalysis, dataMode])
 
   // Update date bounds once meta loads
   useEffect(() => {

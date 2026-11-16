@@ -163,7 +163,7 @@ export function useAnalysis(
       setError((prev) => ({ ...prev, anomaly: extractError(err) }))
     }
     setLoading((prev) => ({ ...prev, anomaly: false }))
-  }, [region, startDate, endDate, selectedAnomalyMonth])
+  }, [region, startDate, endDate, isLive, selectedAnomalyMonth])
 
   const downloadCSV = useCallback(async () => {
     if (!region) return

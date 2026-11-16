@@ -244,28 +244,31 @@ const MapPanel: React.FC<MapPanelProps> = ({
     if (!hotspots || !hotspots.points.length) return;
 
     const zoom = mapRef.current.getZoom();
-    const shouldShowPoints = hotspots.total_in_region < 500 || zoom >= 10;
+    // In realtime mode, ALWAYS render the live satellite fire points
+    // In historical mode, render if under cap or zoomed in
+    const shouldShowPoints = dataMode === 'realtime' || hotspots.total_in_region < 500 || zoom >= 9;
 
     if (shouldShowPoints) {
       hotspots.points.forEach((pt) => {
         const color = pt.sensor === 'MODIS' ? '#E05C1A' : '#1A6DE0';
+        const frpText = pt.frp != null ? `${Number(pt.frp).toFixed(1)} MW` : 'N/A';
         const circle = L.circleMarker([pt.lat, pt.lon], {
-          radius: 4,
+          radius: dataMode === 'realtime' ? 5 : 4,
           color,
           fillColor: color,
-          fillOpacity: 0.7,
-          weight: 1,
+          fillOpacity: 0.8,
+          weight: 1.5,
         });
         circle.bindPopup(
-          `<strong>${pt.sensor}</strong> (${pt.satellite})<br/>` +
+          `<strong>${pt.sensor || 'Active Fire'}</strong> (${pt.satellite || 'Satellite'})<br/>` +
           `Date: ${pt.date}<br/>` +
-          `FRP: ${pt.frp.toFixed(1)} MW<br/>` +
-          `Confidence: ${pt.confidence}`,
+          `FRP: ${frpText}<br/>` +
+          `Confidence: ${pt.confidence || 'nominal'}`,
         );
         hotspotsLayerRef.current.addLayer(circle);
       });
     }
-  }, [hotspots]);
+  }, [hotspots, dataMode]);
 
   const truncationMsg = hotspots?.truncated
     ? `Showing ${hotspots.points.length.toLocaleString()} of ${hotspots.total_in_region.toLocaleString()} hotspots (truncated)`
